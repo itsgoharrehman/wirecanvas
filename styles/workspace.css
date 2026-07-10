@@ -1,0 +1,241 @@
+/* Workspace and Editor Canvas */
+
+#ruler-corner {
+  grid-column: 1;
+  grid-row: 1;
+  background-color: var(--bg-panel);
+  border-right: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+  z-index: 60;
+  position: relative;
+}
+
+#ruler-horizontal {
+  grid-column: 2;
+  grid-row: 1;
+  width: 100%;
+  height: var(--ruler-size);
+  background-color: var(--bg-panel);
+  border-bottom: 1px solid var(--border-light);
+  z-index: 55;
+}
+
+#ruler-vertical {
+  grid-column: 1;
+  grid-row: 2;
+  width: var(--ruler-size);
+  height: 100%;
+  background-color: var(--bg-panel);
+  border-right: 1px solid var(--border-light);
+  z-index: 55;
+}
+
+/* Logical 8000x8000 Canvas */
+#workspace-canvas {
+  width: 8000px;
+  height: 8000px;
+  background-color: var(--bg-canvas);
+  position: relative;
+  transform-origin: 0 0;
+  box-shadow: 0 0 40px rgba(0,0,0,0.03);
+}
+
+/* Grid Pattern Layer (SVG or CSS lines) */
+#canvas-grid-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Objects Layer */
+#canvas-objects-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+}
+
+/* Guides Layer */
+#canvas-guides-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* Persistent guides dropped from rulers */
+.ruler-guide {
+  position: absolute;
+  background-color: var(--accent);
+  opacity: 0.6;
+  z-index: 1000;
+  pointer-events: auto; /* Allow hovering/dragging/deleting them */
+}
+
+.ruler-guide.horizontal {
+  height: 2px;
+  left: 0;
+  right: 0;
+  cursor: row-resize;
+  transform: translateY(-1px);
+}
+
+.ruler-guide.vertical {
+  width: 2px;
+  top: 0;
+  bottom: 0;
+  cursor: col-resize;
+  transform: translateX(-1px);
+}
+
+.ruler-guide:hover {
+  opacity: 1;
+  background-color: var(--guide-color);
+}
+
+/* Overlay Layer (Renders Selection Box, Handles, Smart Guides in Screen Space) */
+#viewport-overlay-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 8000px; /* matches canvas logical height/width boundary, but we'll use transform-matching or absolute coordinates relative to scroll container */
+  height: 8000px;
+  pointer-events: none;
+  z-index: 10;
+  transform-origin: 0 0;
+}
+
+/* SVG Overlay for Smart alignment Lines and Spacing Boxes */
+#smart-guides-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.smart-guide-line {
+  stroke: var(--guide-color);
+  stroke-width: 1;
+  stroke-dasharray: 4 3;
+}
+
+.smart-guide-rect {
+  fill: rgba(226, 0, 116, 0.05);
+  stroke: var(--guide-color);
+  stroke-width: 0.5;
+}
+
+.smart-guide-text-bg {
+  fill: var(--guide-color);
+  rx: var(--radius-sm);
+}
+
+.smart-guide-text {
+  fill: var(--text-white);
+  font-size: 10px;
+  font-weight: 600;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  font-family: var(--font-family);
+}
+
+/* Marquee rubber-band box */
+#marquee-selection-box {
+  position: absolute;
+  border: 1px solid var(--accent);
+  background-color: var(--accent-transparent);
+  pointer-events: none;
+  z-index: 100;
+}
+
+/* Object Outline Bounding Box (drawn in screen space or canvas space? We'll match viewport overlay scaling) */
+#selection-bounding-box {
+  position: absolute;
+  border: 1px solid var(--accent);
+  box-sizing: border-box;
+  z-index: 200;
+  pointer-events: none;
+}
+
+/* Resize Handles */
+.resize-handle {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  background-color: var(--bg-panel);
+  border: 1.5px solid var(--accent);
+  border-radius: 1px;
+  pointer-events: auto;
+  z-index: 210;
+}
+
+/* Handle Positions */
+.handle-nw { top: -4px; left: -4px; cursor: nwse-resize; }
+.handle-ne { top: -4px; right: -4px; cursor: nesw-resize; }
+.handle-se { bottom: -4px; right: -4px; cursor: nwse-resize; }
+.handle-sw { bottom: -4px; left: -4px; cursor: nesw-resize; }
+
+.handle-n { top: -4px; left: calc(50% - 3px); cursor: ns-resize; }
+.handle-e { top: calc(50% - 3px); right: -4px; cursor: ew-resize; }
+.handle-s { bottom: -4px; left: calc(50% - 3px); cursor: ns-resize; }
+.handle-w { top: calc(50% - 3px); left: -4px; cursor: ew-resize; }
+
+/* Rotate Handle */
+.rotate-handle {
+  position: absolute;
+  top: -24px;
+  left: calc(50% - 10px);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: var(--bg-panel);
+  border: 1px solid var(--border-medium);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  pointer-events: auto;
+  z-index: 210;
+  color: var(--text-secondary);
+  transition: all 0.1s;
+}
+
+.rotate-handle:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: var(--shadow-md);
+}
+
+.rotate-handle:active {
+  cursor: grabbing;
+}
+
+.rotate-handle svg {
+  width: 12px;
+  height: 12px;
+  stroke-width: 2.5;
+}
+
+/* Bounding box connecting line to rotate handle */
+#selection-bounding-box::before {
+  content: '';
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  width: 1px;
+  height: 24px;
+  background-color: var(--accent);
+  z-index: 199;
+}

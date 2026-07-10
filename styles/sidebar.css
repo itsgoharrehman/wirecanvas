@@ -1,0 +1,137 @@
+/* Left Sidebar & Panels */
+
+.sidebar-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border-light);
+  background-color: var(--bg-hover);
+  flex-shrink: 0;
+}
+
+.tab-btn {
+  flex: 1;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: var(--spacing-md) var(--spacing-sm);
+  font-weight: 500;
+  font-size: 12px;
+  color: var(--text-muted);
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.1s;
+}
+
+.tab-btn:hover {
+  color: var(--text-primary);
+  background-color: var(--bg-panel);
+}
+
+.tab-btn.active {
+  color: var(--text-primary);
+  border-bottom-color: var(--text-primary);
+  background-color: var(--bg-panel);
+  font-weight: 600;
+}
+
+.sidebar-tab-content {
+  flex: 1;
+  overflow-y: auto;
+  position: relative;
+}
+
+.tab-panel {
+  display: none;
+  height: 100%;
+  flex-direction: column;
+}
+
+.tab-panel.active {
+  display: flex;
+}
+
+/* Panel Sections */
+.panel-section {
+  padding: var(--spacing-lg);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.panel-section:last-child {
+  border-bottom: none;
+}
+
+.panel-section h3 {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  margin-bottom: var(--spacing-md);
+  font-weight: 600;
+}
+
+/* Drag Grids */
+.components-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-sm);
+}
+
+.component-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md) var(--spacing-sm);
+  background-color: var(--bg-panel);
+  color: var(--text-secondary);
+  cursor: grab;
+  user-select: none;
+  transition: all 0.1s;
+  text-align: center;
+  gap: var(--spacing-xs);
+}
+
+.component-item:hover {
+  border-color: var(--border-dark);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.component-item:active {
+  cursor: grabbing;
+  background-color: var(--bg-hover);
+}
+
+.component-item span {
+  font-size: 11px;
+  font-weight: 400;
+}
+
+.component-item svg {
+  width: 20px;
+  height: 20px;
+  stroke-width: 1.5;
+}
+
+/* Sidebar Actions */
+.sidebar-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  width: 100%;
+  background-color: var(--bg-panel);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-sm);
+  font-weight: 500;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.1s;
+}
+
+.sidebar-action-btn:hover {
+  background-color: var(--bg-hover);
+  border-color: var(--border-medium);
+}

@@ -1,0 +1,50 @@
+/* Status Bar Styles */
+
+.status-sec {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: 0 var(--spacing-sm);
+  height: 100%;
+  border-right: 1px solid var(--border-light);
+}
+
+.status-sec:last-child {
+  border-right: none;
+}
+
+.status-spacer {
+  flex-grow: 1;
+}
+
+#status-autosave {
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Save indicators */
+.save-status-saving::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background-color: var(--border-dark);
+  border-radius: 50%;
+  animation: pulse-save 1s infinite alternate;
+}
+
+.save-status-saved::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background-color: #10b981; /* Green dot for success/saved */
+  border-radius: 50%;
+}
+
+@keyframes pulse-save {
+  from { opacity: 0.4; }
+  to { opacity: 1; }
+}

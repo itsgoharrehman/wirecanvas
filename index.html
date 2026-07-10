@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WireCanvas — Low-Fidelity Wireframing Tool</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Pickr Nano Theme (Color Picker) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/nano.min.css"/>
+  
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="styles/main.css">
+  
+  <!-- Expose html-to-image global -->
+  <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
+  <!-- Expose Pickr global -->
+  <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
+</head>
+<body>
+  <div id="app-container">
+    <!-- Top Toolbar -->
+    <header id="top-toolbar">
+      <div class="toolbar-brand">
+        <span class="brand-logo">WC</span>
+        <span class="brand-name" contenteditable="true" spellcheck="false" id="project-name">Untitled Project</span>
+      </div>
+      
+      <div class="toolbar-divider"></div>
+      
+      <div class="toolbar-group">
+        <button id="tool-select" class="toolbar-btn active" aria-label="Select Tool" title="Select (V)">
+          <svg class="icon" viewBox="0 0 24 24"><path d="m4 3 16 6-9 2-2 9z"/></svg>
+        </button>
+        <button id="tool-hand" class="toolbar-btn" aria-label="Hand / Pan Tool" title="Hand (H)">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v7a1 1 0 0 1-2 0V9a1 1 0 0 0-2 0v5a7 7 0 0 0 14 0V9a1 1 0 0 0-2 0v3a1 1 0 0 1-2 0V5a3 3 0 0 0-3-3z"/></svg>
+        </button>
+      </div>
+
+      <div class="toolbar-divider"></div>
+
+      <div class="toolbar-group">
+        <button id="btn-draw-rect" class="toolbar-btn" aria-label="Rectangle" title="Rectangle (R)">
+          <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+        </button>
+        <button id="btn-draw-circle" class="toolbar-btn" aria-label="Circle" title="Circle (O)">
+          <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+        </button>
+        <button id="btn-draw-line" class="toolbar-btn" aria-label="Line" title="Line (L)">
+          <svg class="icon" viewBox="0 0 24 24"><line x1="4" y1="20" x2="20" y2="4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+        <button id="btn-draw-arrow" class="toolbar-btn" aria-label="Arrow" title="Arrow (A)">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M4 20L20 4M20 4H12M20 4V12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button id="btn-draw-text" class="toolbar-btn" aria-label="Text" title="Text (T)">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M4 7V4h16v3M9 20h6M12 4v16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+
+      <div class="toolbar-divider"></div>
+
+      <div class="toolbar-group">
+        <button id="btn-undo" class="toolbar-btn" aria-label="Undo" title="Undo (Ctrl+Z)">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M3 7v6h6M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button id="btn-redo" class="toolbar-btn" aria-label="Redo" title="Redo (Ctrl+Shift+Z)">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M21 7v6h-6M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3l3 2.7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button id="btn-duplicate" class="toolbar-btn" aria-label="Duplicate" title="Duplicate (Ctrl+D)">
+          <svg class="icon" viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+        </button>
+        <button id="btn-delete" class="toolbar-btn" aria-label="Delete" title="Delete (Del)">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+
+      <div class="toolbar-divider"></div>
+
+      <div class="toolbar-group">
+        <button id="btn-group" class="toolbar-btn" aria-label="Group Selection" title="Group (Ctrl+G)">
+          <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1" fill="none" stroke="currentColor" stroke-width="2"/><rect x="14" y="3" width="7" height="7" rx="1" fill="none" stroke="currentColor" stroke-width="2"/><rect x="3" y="14" width="7" height="7" rx="1" fill="none" stroke="currentColor" stroke-width="2"/><rect x="14" y="14" width="7" height="7" rx="1" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+        </button>
+        <button id="btn-ungroup" class="toolbar-btn" aria-label="Ungroup Selection" title="Ungroup (Ctrl+Shift+G)">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M5 5h14v14H5z" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="2 2"/><rect x="7" y="7" width="4" height="4" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="13" y="13" width="4" height="4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+        </button>
+      </div>
+
+      <div class="toolbar-spacer"></div>
+
+      <div class="toolbar-group">
+        <!-- View options toggles -->
+        <button id="btn-toggle-grid" class="toolbar-btn active" aria-label="Toggle Grid" title="Toggle Grid (G)">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M3 3h18v18H3zm0 6h18M3 15h18M9 3v18M15 3v18" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+        </button>
+        <button id="btn-toggle-snap" class="toolbar-btn active" aria-label="Toggle Snapping" title="Toggle Snapping (S)">
+          <svg class="icon" viewBox="0 0 24 24"><path d="m5 12 5 5L20 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+        <button id="btn-toggle-rulers" class="toolbar-btn active" aria-label="Toggle Rulers" title="Toggle Rulers (Ctrl+R)">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M6 2v4M10 2v2M14 2v4M18 2v2M22 2v20M2 6h4M2 10h2M2 14h4M2 18h2M2 22h20" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+        </button>
+      </div>
+
+      <div class="toolbar-divider"></div>
+
+      <!-- Zoom Dropdown -->
+      <div class="zoom-dropdown">
+        <button id="zoom-select-btn" class="dropdown-trigger-btn">
+          <span id="zoom-text">100%</span>
+          <svg class="icon icon-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+        </button>
+        <div id="zoom-dropdown-menu" class="dropdown-menu">
+          <button data-zoom="0.25">25%</button>
+          <button data-zoom="0.50">50%</button>
+          <button data-zoom="0.75">75%</button>
+          <button data-zoom="1.00">100%</button>
+          <button data-zoom="1.50">150%</button>
+          <button data-zoom="2.00">200%</button>
+          <hr>
+          <button data-zoom="fit">Fit to Screen</button>
+          <button data-zoom="selection">Zoom to Selection</button>
+        </div>
+      </div>
+
+      <div class="toolbar-divider"></div>
+
+      <!-- Import/Export -->
+      <div class="io-buttons">
+        <button id="btn-import" class="toolbar-btn-text" title="Import JSON">Import</button>
+        <input type="file" id="import-file-input" accept=".json" style="display: none;">
+        
+        <div class="export-dropdown">
+          <button id="btn-export-trigger" class="toolbar-btn-text">
+            Export
+            <svg class="icon icon-chevron" viewBox="0 0 24 24" style="width:12px;height:12px;"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+          </button>
+          <div id="export-dropdown-menu" class="dropdown-menu">
+            <button id="btn-export-json">Export project (JSON)</button>
+            <button id="btn-export-png-page">Export current page (PNG)</button>
+            <button id="btn-export-png-selection">Export selection (PNG)</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="toolbar-divider"></div>
+      
+      <!-- Present Mode -->
+      <button id="btn-present" class="toolbar-btn" aria-label="Present Mode" title="Present Mode (Ctrl+P)">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M2 3h20v14H2zM8 21h8M12 17v4" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+      </button>
+    </header>
+
+    <!-- Main Section -->
+    <div id="workspace-container">
+      <!-- Left Sidebar -->
+      <aside id="left-sidebar" class="sidebar">
+        <nav class="sidebar-tabs">
+          <button id="tab-components" class="tab-btn active" data-tab="components">Components</button>
+          <button id="tab-layers" class="tab-btn" data-tab="layers">Layers</button>
+          <button id="tab-pages" class="tab-btn" data-tab="pages">Pages</button>
+        </nav>
+        
+        <div class="sidebar-tab-content">
+          <!-- Components Tab -->
+          <div id="panel-components" class="tab-panel active">
+            <div class="panel-section">
+              <h3>Basic Shapes</h3>
+              <div class="components-grid" id="shapes-list">
+                <!-- Draggable shapes will be auto-generated here -->
+              </div>
+            </div>
+            <div class="panel-section">
+              <h3>UI Components</h3>
+              <div class="components-grid" id="ui-components-list">
+                <!-- Draggable UI elements will be auto-generated here -->
+              </div>
+            </div>
+            <div class="panel-section">
+              <h3>Layout Templates</h3>
+              <div class="templates-list" id="templates-list">
+                <!-- Clickable templates will be auto-generated here -->
+              </div>
+            </div>
+          </div>
+          
+          <!-- Layers Tab -->
+          <div id="panel-layers" class="tab-panel">
+            <div id="layers-tree-container">
+              <!-- Tree view will be rendered here dynamically -->
+            </div>
+          </div>
+          
+          <!-- Pages Tab -->
+          <div id="panel-pages" class="tab-panel">
+            <div class="pages-controls">
+              <button id="btn-add-page" class="sidebar-action-btn">
+                <svg class="icon" viewBox="0 0 24 24" style="width: 14px; height: 14px;"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                Add Page
+              </button>
+            </div>
+            <div id="pages-list-container">
+              <!-- Page rows will be rendered here dynamically -->
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Central Editor Area -->
+      <main id="editor-viewport">
+        <!-- Rulers -->
+        <canvas id="ruler-horizontal"></canvas>
+        <canvas id="ruler-vertical"></canvas>
+        
+        <!-- Ruler Corner Intersection Block -->
+        <div id="ruler-corner"></div>
+
+        <!-- Canvas Frame (scrollable viewport container) -->
+        <div id="canvas-scroll-container">
+          <!-- Logical Canvas Container (holds the transform scale/translate) -->
+          <div id="workspace-canvas" style="transform: translate3d(0px, 0px, 0px) scale(1);">
+            
+            <!-- Snapping & Guides Grid (rendered inside canvas space) -->
+            <div id="canvas-grid-pattern"></div>
+            
+            <!-- Wireframe Objects Layer (DOM elements) -->
+            <div id="canvas-objects-layer"></div>
+
+            <!-- Guides Layer (Ruler guide lines in canvas space) -->
+            <div id="canvas-guides-layer"></div>
+            
+          </div>
+
+          <!-- Screen-Space Selection & Snapping Overlay (draws handles, selections, guides in viewport space) -->
+          <div id="viewport-overlay-layer">
+            <!-- Smart pink alignment lines and spacing label boxes -->
+            <svg id="smart-guides-svg"></svg>
+            
+            <!-- Rubber-band selection box -->
+            <div id="marquee-selection-box" class="hidden"></div>
+            
+            <!-- Selection Outline Bounding Box (renders handles in client coordinates) -->
+            <div id="selection-bounding-box" class="hidden">
+              <div class="selection-outline"></div>
+              <!-- Corner Handles -->
+              <div class="resize-handle handle-nw" data-handle="nw"></div>
+              <div class="resize-handle handle-ne" data-handle="ne"></div>
+              <div class="resize-handle handle-se" data-handle="se"></div>
+              <div class="resize-handle handle-sw" data-handle="sw"></div>
+              <!-- Side Handles -->
+              <div class="resize-handle handle-n" data-handle="n"></div>
+              <div class="resize-handle handle-e" data-handle="e"></div>
+              <div class="resize-handle handle-s" data-handle="s"></div>
+              <div class="resize-handle handle-w" data-handle="w"></div>
+              <!-- Rotate Handle -->
+              <div class="rotate-handle" data-handle="r">
+                <svg viewBox="0 0 24 24"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- Right Sidebar -->
+      <aside id="right-sidebar" class="sidebar">
+        <div class="sidebar-header">
+          <h3>Properties</h3>
+        </div>
+        <div id="properties-panel-content">
+          <!-- Rendered dynamically by scripts/properties.js -->
+        </div>
+      </aside>
+    </div>
+
+    <!-- Status Bar -->
+    <footer id="status-bar">
+      <div id="status-selection" class="status-sec">No selection</div>
+      <div class="status-spacer"></div>
+      <div id="status-tool" class="status-sec">Tool: Select</div>
+      <div id="status-coords" class="status-sec">x: 0px, y: 0px</div>
+      <div id="status-snap" class="status-sec">Snap: On</div>
+      <div id="status-grid" class="status-sec">Grid: 16px</div>
+      <div id="status-autosave" class="status-sec">Saved</div>
+    </footer>
+  </div>
+
+  <!-- Custom Context Menu -->
+  <div id="context-menu" class="context-menu hidden">
+    <button class="context-menu-item" data-action="cut">Cut <span class="shortcut">Ctrl+X</span></button>
+    <button class="context-menu-item" data-action="copy">Copy <span class="shortcut">Ctrl+C</span></button>
+    <button class="context-menu-item" data-action="paste">Paste <span class="shortcut">Ctrl+V</span></button>
+    <button class="context-menu-item" data-action="paste-in-place">Paste in Place <span class="shortcut">Ctrl+Shift+V</span></button>
+    <hr>
+    <button class="context-menu-item" data-action="duplicate">Duplicate <span class="shortcut">Ctrl+D</span></button>
+    <button class="context-menu-item" data-action="delete">Delete <span class="shortcut">Del</span></button>
+    <hr>
+    <button class="context-menu-item" data-action="group">Group <span class="shortcut">Ctrl+G</span></button>
+    <button class="context-menu-item" data-action="ungroup">Ungroup <span class="shortcut">Ctrl+Shift+G</span></button>
+    <hr>
+    <button class="context-menu-item" data-action="front">Bring to Front <span class="shortcut">Ctrl+]</span></button>
+    <button class="context-menu-item" data-action="forward">Bring Forward <span class="shortcut">Ctrl+Shift+]</span></button>
+    <button class="context-menu-item" data-action="backward">Send Backward <span class="shortcut">Ctrl+Shift+[</span></button>
+    <button class="context-menu-item" data-action="back">Send to Back <span class="shortcut">Ctrl+[</span></button>
+    <hr>
+    <button class="context-menu-item" data-action="lock">Lock / Unlock <span class="shortcut">Ctrl+L</span></button>
+    <button class="context-menu-item" data-action="hide">Hide <span class="shortcut">Ctrl+H</span></button>
+    <button class="context-menu-item" data-action="rename">Rename <span class="shortcut">Enter</span></button>
+  </div>
+
+  <!-- Main JS entrypoint -->
+  <script type="module" src="scripts/app.js"></script>
+</body>
+</html>

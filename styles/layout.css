@@ -1,0 +1,87 @@
+/* Layout Structure */
+#app-container {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: var(--bg-app);
+}
+
+#top-toolbar {
+  height: var(--toolbar-height);
+  background-color: var(--bg-panel);
+  border-bottom: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--spacing-md);
+  gap: var(--spacing-sm);
+  z-index: 100;
+  box-shadow: var(--shadow-sm);
+}
+
+#workspace-container {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  height: calc(100vh - var(--toolbar-height) - var(--statusbar-height));
+  position: relative;
+  overflow: hidden;
+}
+
+/* Sidebars - Left and Right */
+.sidebar {
+  width: var(--sidebar-width);
+  background-color: var(--bg-panel);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  z-index: 10;
+  overflow: hidden;
+}
+
+#left-sidebar {
+  border-right: 1px solid var(--border-light);
+}
+
+#right-sidebar {
+  border-left: 1px solid var(--border-light);
+}
+
+/* Editor Viewport Center */
+#editor-viewport {
+  flex: 1;
+  position: relative;
+  background-color: var(--bg-app);
+  overflow: hidden;
+  display: grid;
+  /* Columns: vertical ruler, rest of viewport */
+  grid-template-columns: var(--ruler-size) 1fr;
+  /* Rows: horizontal ruler, rest of viewport */
+  grid-template-rows: var(--ruler-size) 1fr;
+}
+
+#canvas-scroll-container {
+  grid-column: 2;
+  grid-row: 2;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  outline: none;
+}
+
+/* Status Bar */
+#status-bar {
+  height: var(--statusbar-height);
+  background-color: var(--bg-panel);
+  border-top: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--spacing-md);
+  gap: var(--spacing-lg);
+  font-size: 11px;
+  color: var(--text-secondary);
+  z-index: 100;
+  user-select: none;
+}

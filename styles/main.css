@@ -1,0 +1,10 @@
+@import './base.css';
+@import './layout.css';
+@import './toolbar.css';
+@import './sidebar.css';
+@import './layers.css';
+@import './workspace.css';
+@import './components.css';
+@import './properties.css';
+@import './statusbar.css';
+@import './contextmenu.css';
