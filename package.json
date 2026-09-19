@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "devDependencies": {
-    "vite": "^5.0.0"
+    "vite": "^8.3.0"
   },
   "dependencies": {
     "html-to-image": "^1.11.11",
