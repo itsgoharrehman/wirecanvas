@@ -1,37 +1,22 @@
-# Contributing Guidelines
+# Contributing to wirecanvas
 
-Thank you for your interest in contributing. We welcome contributions that improve performance, resolve bugs, enhance documentation, or expand feature capabilities.
+Thank you for your interest in contributing. We welcome contributions that expand the UI component library, improve grid transformation mathematics, or enhance export fidelity.
 
-## Code of Conduct
+## Component Contribution Guidelines
+When implementing a new canvas element:
+1. **Registry Integration**: Register the component in `components/registry.js` with defined default dimensions, category, and property controls.
+2. **Transform Compliance**: Ensure all component bounding boxes respond predictably to `scripts/resize.js` and `scripts/rotate.js`.
+3. **State Serialization**: All component visual states must cleanly serialize into the JSON layout format in `scripts/export.js`.
 
-All contributors and participants are expected to adhere to the standards described in [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
-
-## Getting Started
-
-1. Fork the repository on GitHub.
-2. Clone your fork locally:
+## Contribution Workflow
+1. Fork and clone:
    ```bash
-   git clone https://github.com/<your-username>/<repo-name>.git
-   cd <repo-name>
+   git clone https://github.com/<your-username>/wirecanvas.git
+   cd wirecanvas
    ```
-3. Create a descriptive feature branch:
+2. Create a focused branch:
    ```bash
    git checkout -b feature/your-feature-name
    ```
-
-## Development Standards
-
-* **Clean Code**: Follow idiomatic patterns for the project language.
-* **Testing**: Ensure existing test suites pass and write new tests for added functionality.
-* **Documentation**: Update relevant README or API docs if altering functional behavior.
-* **Commit Messages**: Write concise, imperative commit messages (e.g. `feat: add request timeout handler`).
-
-## Submitting Pull Requests
-
-1. Rebase your branch against the latest `main` branch.
-2. Push changes to your fork.
-3. Open a Pull Request against `main` with a clear description of the problem solved and test results.
-
-## Reporting Bugs
-
-Please search existing issues before opening a new bug report. Use the provided bug report template to supply reproducible steps, system details, and expected outcomes.
+3. Run the development server (`npm run dev`) and test your component on the canvas.
+4. Submit a Pull Request completing the mandatory security checklist in `.github/PULL_REQUEST_TEMPLATE.md`.
