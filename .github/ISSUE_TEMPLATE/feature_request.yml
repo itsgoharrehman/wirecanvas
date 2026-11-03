@@ -1,0 +1,23 @@
+name: Feature Request
+description: Propose a new UI component, canvas tool, or export format for wirecanvas
+title: "[FEATURE]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Propose a new component primitive, export option, or transformation capability.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement
+      description: Is this feature related to a limitation or missing UI component?
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: Clear description of the proposed feature and component architecture.
+    validations:
+      required: true
